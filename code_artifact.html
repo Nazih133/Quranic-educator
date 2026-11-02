@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المربي القرآني - معلم الحفظ والمحاسبة الذاتية</title>
+    
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                            950: '#052e16',
+                        },
+                        gold: {
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                        },
+                        sand: {
+                            50: '#faf8f5',
+                            100: '#f4efe6',
+                            200: '#e7ded0',
+                        }
+                    },
+                    fontFamily: {
+                        amiri: ['Amiri', 'serif'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts: Amiri & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #faf8f5;
+        }
+        .font-amiri {
+            font-family: 'Amiri', serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f4efe6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #166534;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-gray-800 flex flex-col justify-between">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="bg-emerald-900 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-3">
+            
+            <!-- Logo & Title -->
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="w-10 h-10 bg-gold-500 text-emerald-950 rounded-full flex items-center justify-center font-bold text-xl shadow">
+                    <i class="fa-solid fa-quran"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold font-amiri tracking-wide text-gold-400">المربي القرآني</h1>
+                    <p class="text-[11px] text-emerald-200">معلمك الذكي للحفظ والتفسير والمحاسبة السلوكية (صدقة جارية)</p>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="flex items-center space-x-4 space-x-reverse bg-emerald-950/60 px-4 py-1.5 rounded-full text-xs text-emerald-100 border border-emerald-800">
+                <div class="flex items-center" title="سلسلة المواظبة اليومية">
+                    <i class="fa-solid fa-fire text-gold-400 ml-1"></i>
+                    <span>المواظبة: <strong id="stat-streak" class="text-white">١ يوم</strong></span>
+                </div>
+                <div class="h-3 w-px bg-emerald-700"></div>
+                <div class="flex items-center" title="نقاط الأجر والعمل الصالح">
+                    <i class="fa-solid fa-star text-gold-400 ml-1"></i>
+                    <span>نقاط الأجر: <strong id="stat-points" class="text-white">٣٥٠</strong></span>
+                </div>
+            </div>
+
+            <!-- Main Navigation Tabs -->
+            <nav class="flex items-center bg-emerald-950 p-1 rounded-xl text-xs font-semibold" id="main-nav">
+                <button onclick="switchTab('quran')" id="tab-quran" class="tab-btn px-3 py-1.5 rounded-lg transition bg-gold-500 text-emerald-950 shadow font-bold">
+                    <i class="fa-solid fa-book-open ml-1"></i> المصحف والتفسير
+                </button>
+                <button onclick="switchTab('sheikh')" id="tab-sheikh" class="tab-btn px-3 py-1.5 rounded-lg transition text-emerald-200 hover:bg-emerald-800 hover:text-white">
+                    <i class="fa-solid fa-microphone-lines ml-1"></i> المعلم والتسميع
+                </button>
+                <button onclick="switchTab('accountability')" id="tab-accountability" class="tab-btn px-3 py-1.5 rounded-lg transition text-emerald-200 hover:bg-emerald-800 hover:text-white">
+                    <i class="fa-solid fa-clipboard-check ml-1"></i> المحاسبة والسلوك
+                </button>
+                <button onclick="switchTab('rewards')" id="tab-rewards" class="tab-btn px-3 py-1.5 rounded-lg transition text-emerald-200 hover:bg-emerald-800 hover:text-white">
+                    <i class="fa-solid fa-award ml-1"></i> البشائر والتنبيهات
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
+
+        <!-- 1. SECTION: المصحف والتفسير (Quran & Tafseer) -->
+        <section id="sec-quran" class="tab-content">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Quran Reader Column -->
+                <div class="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-sand-200 flex flex-col justify-between">
+                    <div>
+                        <!-- Quran Header & Controls -->
+                        <div class="flex flex-col sm:flex-row items-center justify-between pb-4 mb-4 border-b border-sand-200 gap-3">
+                            <div class="flex items-center space-x-3 space-x-reverse w-full sm:w-auto">
+                                <i class="fa-solid fa-book-open text-emerald-800 text-xl"></i>
+                                <div>
+                                    <h2 id="surah-title" class="text-xl font-bold font-amiri text-emerald-950">سورة الفاتحة</h2>
+                                    <span id="surah-meta" class="text-xs text-gray-500">مكية • ٧ آيات</span>
+                                </div>
+                            </div>
+
+                            <!-- Search & Select Surah -->
+                            <div class="flex items-center space-x-2 space-x-reverse w-full sm:w-auto">
+                                <input type="text" id="surah-search" onkeyup="filterSurahs()" placeholder="بحث عن سورة..." class="bg-sand-50 border border-sand-200 text-xs rounded-lg p-2 text-emerald-900 focus:ring-2 focus:ring-emerald-600 outline-none w-full sm:w-32">
+                                <select id="surah-select" onchange="loadSurah(this.value)" class="bg-sand-50 border border-sand-200 text-xs rounded-lg p-2 text-emerald-900 focus:ring-2 focus:ring-emerald-600 outline-none w-full sm:w-36">
+                                    <!-- Populated via JS -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Daily Wird Badge & Audio Controls -->
+                        <div class="flex items-center justify-between bg-sand-100 p-3 rounded-xl mb-4">
+                            <div class="flex items-center space-x-2 space-x-reverse">
+                                <button onclick="toggleQuranAudio()" id="play-quran-btn" class="w-9 h-9 bg-emerald-800 hover:bg-emerald-700 text-white rounded-full flex items-center justify-center transition shadow">
+                                    <i class="fa-solid fa-play" id="quran-play-icon"></i>
+                                </button>
+                                <span id="audio-status" class="text-xs font-semibold text-emerald-900">تلاوة السورة بصوت الشيخ المعلم</span>
+                            </div>
+                            <button onclick="markCurrentSurahAsWird()" class="px-3 py-1.5 bg-gold-500 hover:bg-gold-600 text-emerald-950 text-xs font-bold rounded-lg transition flex items-center">
+                                <i class="fa-solid fa-bookmark ml-1"></i> تحديد كـ ورد يومي
+                            </button>
+                        </div>
+
+                        <div id="daily-word-tag" class="hidden mb-4 p-2 bg-emerald-100 text-emerald-900 text-xs rounded-lg font-bold flex items-center justify-center border border-emerald-300">
+                            <i class="fa-solid fa-star text-gold-500 ml-1"></i> هذه السورة هي وردك اليومي المحدد للحفظ والتكرار
+                        </div>
+
+                        <!-- Verses Text Display -->
+                        <div id="quran-display" class="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+                            <!-- Ayahs inserted dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tafseer & Reflection Column -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-sand-200 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-emerald-900 font-amiri mb-4 flex items-center border-b pb-3">
+                            <i class="fa-solid fa-scroll text-gold-500 ml-2"></i> التفسير الميسر والفوائد
+                        </h3>
+                        <div id="tafseer-card" class="bg-sand-50 p-4 rounded-xl border border-sand-200 mb-4">
+                            <h4 id="tafseer-verse-num" class="font-bold text-xs text-emerald-800 mb-2">اختر آية لعرض التفسير</h4>
+                            <p id="tafseer-verse-text" class="font-amiri text-lg text-emerald-950 mb-3 border-b border-sand-200 pb-2">﴿بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ﴾</p>
+                            <p id="tafseer-text" class="text-xs text-gray-700 leading-relaxed mb-3">
+                                انقر على أي آية من مصحف التلاوة لعرض التفسير الميسر والفوائد السلوكية والتربوية المتعلقة بها.
+                            </p>
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200">
+                            <h5 class="font-bold text-xs text-emerald-900 mb-1 flex items-center">
+                                <i class="fa-solid fa-lightbulb text-gold-500 ml-1"></i> فائدة وحكمة سلوكية:
+                            </h5>
+                            <p id="tafseer-benefit" class="text-xs text-emerald-800">
+                                استحضر نية التعلم والعمل بما تحفظه وتتلوه من آيات الله.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. SECTION: المعلم والتسميع (AI Sheikh & Interactive Voice Recitation) -->
+        <section id="sec-sheikh" class="tab-content hidden">
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-sand-200 max-w-4xl mx-auto">
+                <div class="text-center mb-6">
+                    <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-3 border-2 border-emerald-600 shadow-inner">
+                        <i class="fa-solid fa-user-tie text-3xl text-emerald-800" id="sheikh-avatar-icon"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold font-amiri text-emerald-900 mb-1">مجلس الشيخ المعلم - التسميع التفاعلي</h2>
+                    <p class="text-xs text-gray-600">اتلُ آياتك بصوت حَسَن، وسيقوم المعلم بالاستماع إليك، وتحديد الأخطاء، وإعطائك النصح والتوجيه بصوته.</p>
+                </div>
+
+                <!-- Surah selector for Recitation -->
+                <div class="flex flex-col sm:flex-row items-center justify-between bg-sand-100 p-4 rounded-xl mb-6 gap-3 border border-sand-200">
+                    <div class="flex items-center space-x-2 space-x-reverse w-full sm:w-auto">
+                        <label for="recite-surah-select" class="text-xs font-bold text-emerald-900 whitespace-nowrap">اختر سورة التسميع:</label>
+                        <select id="recite-surah-select" onchange="setupReciteSurah(this.value)" class="bg-white border border-sand-200 text-emerald-900 text-xs rounded-lg p-2 focus:ring-2 focus:ring-emerald-600 outline-none w-full sm:w-48">
+                            <!-- Populated via JS -->
+                        </select>
+                    </div>
+                    <div class="text-xs font-semibold text-emerald-800">
+                        الآية المطلوبة: <span id="target-ayah-text" class="font-amiri font-bold text-gold-600 text-sm">﴿بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ﴾</span>
+                    </div>
+                </div>
+
+                <!-- Interactive Voice Trigger & Status -->
+                <div class="p-6 md:p-8 bg-sand-50 rounded-2xl border-2 border-dashed border-emerald-300 mb-6 flex flex-col items-center justify-center relative overflow-hidden">
+                    <div id="mic-pulse-ring" class="hidden absolute w-32 h-32 rounded-full bg-emerald-400 opacity-20 animate-ping"></div>
+                    
+                    <button onclick="toggleRecitation()" id="mic-btn" class="relative z-10 w-24 h-24 bg-gradient-to-tr from-emerald-800 to-emerald-600 rounded-full text-white text-3xl shadow-xl hover:scale-105 transition-all flex items-center justify-center border-4 border-gold-400">
+                        <i class="fa-solid fa-microphone" id="mic-icon"></i>
+                    </button>
+                    
+                    <span id="recitation-status" class="text-xs font-bold text-emerald-900 mt-4 bg-emerald-100 px-3 py-1 rounded-full">
+                        اضغط على الميكروفون لبدء التسميع
+                    </span>
+                    <p class="text-[11px] text-gray-400 mt-2">نظام التسميع يتوافق مع المتصفحات الحديثة عبر واجهة Web Speech API</p>
+                </div>
+
+                <!-- Live Recognized Speech Stream -->
+                <div class="mb-6 bg-sand-100 p-4 rounded-xl border border-sand-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-gray-600"><i class="fa-solid fa-wave-square text-emerald-700 ml-1"></i> الكلمات المسموعة من صوتك:</span>
+                        <span id="speech-accuracy" class="text-xs font-bold text-emerald-800 hidden">الدقة: 0%</span>
+                    </div>
+                    <div id="recognized-text" class="font-amiri text-lg text-emerald-950 bg-white p-3 rounded-lg border border-sand-200 min-h-[50px] text-center italic text-gray-400">
+                        انطق الآية بعد الضغط على الميكروفون...
+                    </div>
+                </div>
+
+                <!-- Sheikh Feedback Response Panel -->
+                <div id="sheikh-feedback-card" class="bg-sand-100 p-5 rounded-xl border-r-4 border-gold-500 shadow-sm transition-all">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <i class="fa-solid fa-quote-right text-gold-600"></i>
+                            <span class="font-bold text-xs text-emerald-950">توجيه وحكم الشيخ المعلم:</span>
+                        </div>
+                        <button onclick="speakSheikhFeedback()" class="px-2.5 py-1 bg-emerald-800 hover:bg-emerald-700 text-white rounded text-[11px] font-bold transition flex items-center">
+                            <i class="fa-solid fa-volume-high ml-1"></i> إعادة استماع صوت الشيخ
+                        </button>
+                    </div>
+                    <p id="sheikh-comment" class="text-xs font-amiri text-base leading-relaxed text-emerald-900">
+                        "أهلاً بك يا بني في مجلس التلاوة. اختر السورة واضغط الميكروفون للتسميع، وسأكون معك مستمعاً وموجهاً."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. SECTION: جلسة المحاسبة والسلوك (Self-Accountability Panel) -->
+        <section id="sec-accountability" class="tab-content hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Daily Prayer & Behavior Tracker -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-sand-200">
+                    <h3 class="text-lg font-bold text-emerald-900 font-amiri mb-4 flex items-center border-b pb-3">
+                        <i class="fa-solid fa-check-double text-emerald-600 ml-2"></i> سجل العبادات والصلوات اليومي
+                    </h3>
+                    <div class="space-y-3" id="checklist-container">
+                        <div class="flex items-center justify-between p-3 bg-sand-50 rounded-xl border border-sand-200">
+                            <span class="text-xs font-semibold text-gray-700">صلاة الفجر في الجماعة</span>
+                            <button onclick="toggleCheckItem(this, 50)" class="px-3 py-1 text-xs bg-emerald-100 text-emerald-800 rounded-lg font-bold hover:bg-emerald-200 transition">
+                                <i class="fa-solid fa-check ml-1"></i> تمت بحمد الله (+٥٠)
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-sand-50 rounded-xl border border-sand-200">
+                            <span class="text-xs font-semibold text-gray-700">أذكار الصباح والمساء</span>
+                            <button onclick="toggleCheckItem(this, 30)" class="px-3 py-1 text-xs bg-emerald-100 text-emerald-800 rounded-lg font-bold hover:bg-emerald-200 transition">
+                                <i class="fa-solid fa-check ml-1"></i> تمت بحمد الله (+٣٠)
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-sand-50 rounded-xl border border-sand-200">
+                            <span class="text-xs font-semibold text-gray-700">تلاوة الورد القرآني اليومي</span>
+                            <button onclick="toggleCheckItem(this, 40)" class="px-3 py-1 text-xs bg-emerald-100 text-emerald-800 rounded-lg font-bold hover:bg-emerald-200 transition">
+                                <i class="fa-solid fa-check ml-1"></i> تمت بحمد الله (+٤٠)
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-sand-50 rounded-xl border border-sand-200">
+                            <span class="text-xs font-semibold text-gray-700">ورد بر الوالدين والصلة وحسن الخلق</span>
+                            <button onclick="toggleCheckItem(this, 30)" class="px-3 py-1 text-xs text-amber-800 bg-amber-100 rounded-lg font-bold hover:bg-amber-200 transition">
+                                <i class="fa-solid fa-clock ml-1"></i> تسجيل الإنجاز (+٣٠)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Self Reflection & Counseling Journal Panel -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-sand-200 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-emerald-900 font-amiri mb-4 flex items-center border-b pb-3">
+                            <i class="fa-solid fa-book-bookmark text-gold-500 ml-2"></i> دفتر المحاسبة والتأمل اليومي
+                        </h3>
+                        <p class="text-xs text-gray-600 mb-3">دون هنا مواقف يومك، وسيقوم المعلم الذكي باستخلاص العِبر وتوجيهك من السيرة النبوية.</p>
+                        <textarea id="reflection-input" placeholder="أكتب هنا ما حدث معك في يومك، أو أي تقصير تود مناقشته مع المربي الحكيم..." class="w-full h-36 p-3 bg-sand-50 border border-sand-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-600 outline-none resize-none mb-3"></textarea>
+                    </div>
+                    <button onclick="submitJournalEntry()" class="w-full py-2.5 bg-emerald-800 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition shadow">
+                        حفظ ومناقشة الجلسة مع الشيخ المعلم <i class="fa-solid fa-paper-plane mr-1"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. SECTION: البشائر والتنبيهات (Notifications & Rewards Panel) -->
+        <section id="sec-rewards" class="tab-content hidden">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-sand-200">
+                <h3 class="text-lg font-bold text-emerald-900 font-amiri mb-4 flex items-center border-b pb-3">
+                    <i class="fa-solid fa-award text-gold-500 ml-2"></i> بشائر الطاعات وتنبيهات التذكير
+                </h3>
+
+                <div class="space-y-4" id="rewards-container">
+                    <!-- Glad Tidings Card -->
+                    <div class="p-4 bg-emerald-50 rounded-xl border-r-4 border-emerald-600 flex items-start space-x-3 space-x-reverse">
+                        <div class="text-2xl text-emerald-600">🌟</div>
+                        <div>
+                            <h4 class="font-bold text-sm text-emerald-950">بشرى المحافظة على السلسلة!</h4>
+                            <p class="text-xs text-emerald-800 mt-1">أتممت ٧ أيام متتالية من الحفظ والتلاوة. قال ﷺ: «وإن أحب الأعمال إلى الله أدومها وإن قل». مبارك عليك هذا التوفيق!</p>
+                        </div>
+                    </div>
+
+                    <!-- Gentle Reminder Card -->
+                    <div class="p-4 bg-amber-50 rounded-xl border-r-4 border-amber-500 flex items-start space-x-3 space-x-reverse">
+                        <div class="text-2xl text-amber-600">💡</div>
+                        <div>
+                            <h4 class="font-bold text-sm text-amber-950">تذكرة الموعظة الحسنة</h4>
+                            <p class="text-xs text-amber-800 mt-1">إذا شعرت بالفتور أو الانشغال، فتذكر قول الله تعالى: ﴿وَسَارِعُوا إِلَىٰ مَغْفِرَةٍ مِّن رَّبِّكُمْ﴾. ابدأ بآية واحدة فقط اليوم ولا تحرم نفسك الأجر.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-emerald-950 text-emerald-200 py-4 border-t border-emerald-800 text-center text-xs">
+        <p>تطبيق المربي القرآني — نفع الله به الإسلام والمسلمين وجعله صدقة جارية لكل من ساهم في نشره واستخدامه.</p>
+    </footer>
+
+    <!-- Interactive Navigation JavaScript Script -->
+    <script>
+        // Surah & Ayah Data Store (Embedded Data for Modules)
+        const quranData = [
+            {
+                number: 1,
+                name: "الفاتحة",
+                type: "مكية",
+                count: 7,
+                audio: "https://server8.mp3quran.net/afs/001.mp3",
+                ayahs: [
+                    { number: 1, text: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", tafseer: "أبتدئ قراءتي للقرآن باسم الله مستعيناً به، (الله) علم على الرب تبارك وتعالى، (الرَّحْمَنِ) الذي وسعت رحمته كل شيء، (الرَّحِيمِ) بالمعتقدين من عباده.", benefit: "البدء باسم الله في كل عمل يجلب البركة والمعونة." },
+                    { number: 2, text: "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ", tafseer: "الثناء الكامل لله بصفاته التي كلها أوصاف كمال، وبنعمه الظاهرة والباطنة الدينية والدنيوية.", benefit: "دوام حمد الله على النعم يزيدها وينمي الشكر في القلب." },
+                    { number: 3, text: "الرَّحْمَٰنِ الرَّحِيمِ", tafseer: "ثناء على الله تعالى بعد حمده في الآية السابقة وتأكيد لرحمته الواسعة.", benefit: "معاملة الناس بالرحمة والرفق اقتداءً بصفات الرحمة." },
+                    { number: 4, text: "مَالِكِ يَوْمِ الدِّينِ", tafseer: "هو سبحانه المالك المتصرف في يوم الجزاء والحساب، وهو يوم القيامة.", benefit: "تذكر يوم الحساب يبعث في النفس الردع عن الظلم واستغلال الوقت." },
+                    { number: 5, text: "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ", tafseer: "نخصك وحدك بالعبادة، ونستعين بك وحدك في جميع أمورنا.", benefit: "إخلاص العبادة لله وحده والتوكل التام عليه في كل شدة." },
+                    { number: 6, text: "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ", tafseer: "وفقنا وأرشدنا واثبتنا على الطريق الواضح الذي لا عوج فيه، وهو الإسلام.", benefit: "الدعاء الدائم بالثبات على الحق والنور في عصر الفتن." },
+                    { number: 7, text: "صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ", tafseer: "طريق النبيين والصديقين والشهداء والصالحين، غير طريق المغضوب عليهم وهم الذين عرفوا الحق ولم يعملوا به، ولا الضالين وهم الذين تركوه عن جهل.", benefit: "الحرص على العلم النافع المتبوع بالعمل الصالح." }
+                ]
+            },
+            {
+                number: 112,
+                name: "الإخلاص",
+                type: "مكية",
+                count: 4,
+                audio: "https://server8.mp3quran.net/afs/112.mp3",
+                ayahs: [
+                    { number: 1, text: "قُلْ هُوَ اللَّهُ أَحَدٌ", tafseer: "قل أيها الرسول: الله هو الواحد الأحد الذي لا شبيه له ولا شريك له.", benefit: "توحيد الله وإفراده بالوحدانية أساس كل خير في الدنيا والآخرة." },
+                    { number: 2, text: "اللَّهُ الصَّمَدُ", tafseer: "الله الذي يقصد وحده في الحوائج كلها، لكلمة كماله وسؤدده.", benefit: "اللجوء إلى الله وحده في رفع الملمات وقضاء الحاجات." },
+                    { number: 3, text: "لَمْ يَلِدْ وَلَمْ يُولَدْ", tafseer: "منزه سبحانه عن أن يكون له ولد أو أن يكون مولوداً من أحد.", benefit: "تنزيه القدير سبحانه عن النقائص." },
+                    { number: 4, text: "وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ", tafseer: "ولم يكن له مساوياً ولا مماثلاً أحد من خلقه.", benefit: "استشعار عظمه الله وإجلاله في القلب." }
+                ]
+            },
+            {
+                number: 113,
+                name: "الفلق",
+                type: "مكية",
+                count: 5,
+                audio: "https://server8.mp3quran.net/afs/113.mp3",
+                ayahs: [
+                    { number: 1, text: "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ", tafseer: "قل: أعتصم وأتحصن برب الصبح وزوال الليل.", benefit: "تحصين النفس والتحصن بالله في الصباح والمساء." },
+                    { number: 2, text: "مِن شَرِّ مَا خَلَقَ", tafseer: "من شر جميع المخلوقات وأذاها.", benefit: "الاستعاذة الشاملة من كل سوء مقدر." },
+                    { number: 3, text: "وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ", tafseer: "ومن شر الليل إذا أظلم ودخل.", benefit: "الحذر والاستعاذة في أوقات الغفلة والظلمات." },
+                    { number: 4, text: "وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ", tafseer: "ومن شر الساحرات اللاتي ينفثن في العقد.", benefit: "الحفاظ على الأذكار والرقية الشرعية لحماية الروح." },
+                    { number: 5, text: "وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ", tafseer: "ومن شر حاسد يتمنى زوال النعمة عن غيره.", benefit: "سلامة الصدر من الحسد والاستعاذة من عيون الحاسدين." }
+                ]
+            },
+            {
+                number: 114,
+                name: "الناس",
+                type: "مكية",
+                count: 6,
+                audio: "https://server8.mp3quran.net/afs/114.mp3",
+                ayahs: [
+                    { number: 1, text: "قُلْ أَعُوذُ بِرَبِّ النَّاسِ", tafseer: "قل: ألوذ وأستجير برب الناس وخالقهم ومدبر أمورهم.", benefit: "استشعار ربوبية الله الشاملة للبشر." },
+                    { number: 2, text: "مَلِكِ النَّاسِ", tafseer: "مالكهم والمتصرف فيهم بما يشاء.", benefit: "الانقياد لملك الله الشامل والامتثال لأوامره." },
+                    { number: 3, text: "إِلَٰهِ النَّاسِ", tafseer: "معبودهم بحق الذي لا معبود بحق سواه.", benefit: "توحيد الألوهية في المشاعر والسلوك." },
+                    { number: 4, text: "مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ", tafseer: "من شر الشيطان الذي يوسوس عند الغفلة ويخنس ويكف عند ذكر الله.", benefit: "مقاومة الوساوس بذكر الله الدائم والمستمر." },
+                    { number: 5, text: "الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ", tafseer: "الذي يبث الشر والشكوك في قلوب الناس.", benefit: "يقظة القلب وانتقاء الأفكار والإيمانيات." },
+                    { number: 6, text: "مِنَ الْجِنَّةِ وَالنَّاسِ", tafseer: "سواء كان هذا الموسوس من شياطين الجن أو من شياطين الإنس.", benefit: "الحذر من جلساء السوء وشياطين الإنس بنفس حذر شياطين الجن." }
+                ]
+            }
+        ];
+
+        let currentSurahIndex = 0;
+        let quranAudioPlayer = new Audio();
+        let isPlaying = false;
+        let selectedWirdSurah = 1;
+        let userPoints = 350;
+
+        // Module 3: Speech Recognition Variables
+        let recognition = null;
+        let isRecording = false;
+        let currentReciteSurah = null;
+        let currentAyahIndex = 0;
+
+        window.onload = function() {
+            populateSurahSelect(quranData);
+            populateReciteSurahSelect(quranData);
+            loadSurah(1);
+            setupReciteSurah(1);
+            initSpeechRecognition();
+        };
+
+        function populateSurahSelect(surahs) {
+            const select = document.getElementById('surah-select');
+            if (!select) return;
+            select.innerHTML = '';
+            surahs.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s.number;
+                opt.textContent = `${s.number}. سورة ${s.name}`;
+                select.appendChild(opt);
+            });
+        }
+
+        function populateReciteSurahSelect(surahs) {
+            const select = document.getElementById('recite-surah-select');
+            if (!select) return;
+            select.innerHTML = '';
+            surahs.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s.number;
+                opt.textContent = `سورة ${s.name}`;
+                select.appendChild(opt);
+            });
+        }
+
+        function setupReciteSurah(surahNum) {
+            currentReciteSurah = quranData.find(s => s.number == surahNum);
+            currentAyahIndex = 0;
+            if (currentReciteSurah && currentReciteSurah.ayahs.length > 0) {
+                document.getElementById('target-ayah-text').textContent = currentReciteSurah.ayahs[0].text;
+            }
+        }
+
+        // Initialize Web Speech Recognition Engine
+        function initSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (SpeechRecognition) {
+                recognition = new SpeechRecognition();
+                recognition.lang = 'ar-SA';
+                recognition.continuous = false;
+                recognition.interimResults = true;
+
+                recognition.onstart = function() {
+                    isRecording = true;
+                    document.getElementById('mic-pulse-ring').classList.remove('hidden');
+                    document.getElementById('recitation-status').textContent = "جاري الاستماع إليك الآن... اتلُ الآية المطلوبة";
+                    document.getElementById('mic-btn').classList.add('bg-red-600');
+                };
+
+                recognition.onresult = function(event) {
+                    let transcript = '';
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        transcript += event.results[i][0].transcript;
+                    }
+                    document.getElementById('recognized-text').textContent = transcript;
+                    document.getElementById('recognized-text').classList.remove('italic', 'text-gray-400');
+                    evaluateRecitation(transcript);
+                };
+
+                recognition.onerror = function(event) {
+                    stopRecitationState();
+                    document.getElementById('recitation-status').textContent = "حدث خطأ في التقاط الصوت، حاول مجدداً.";
+                };
+
+                recognition.onend = function() {
+                    stopRecitationState();
+                };
+            } else {
+                document.getElementById('recitation-status').textContent = "متصفحك الحالي لا يدعم التسميع الصوتي المباشر، يمكنك المحاكاة النصية.";
+            }
+        }
+
+        function toggleRecitation() {
+            if (!recognition) {
+                alert("تسميع الصوت متاح عبر متصفحات Chrome و Edge و Safari الحديثة.");
+                return;
+            }
+            if (isRecording) {
+                recognition.stop();
+            } else {
+                recognition.start();
+            }
+        }
+
+        function stopRecitationState() {
+            isRecording = false;
+            document.getElementById('mic-pulse-ring').classList.add('hidden');
+            document.getElementById('recitation-status').textContent = "اضغط على الميكروفون للبدء في التسميع";
+            document.getElementById('mic-btn').classList.remove('bg-red-600');
+        }
+
+        // Evaluate Voice Recitation against Ayah text
+        function evaluateRecitation(spokenText) {
+            if (!currentReciteSurah) return;
+            const targetText = currentReciteSurah.ayahs[currentAyahIndex].text;
+            
+            // Clean Arabic text helper for comparison
+            const clean = (str) => str.replace(/[\u064B-\u0652\u0670]/g, "").replace(/[أإآ]/g, "ا").trim();
+            const cleanTarget = clean(targetText);
+            const cleanSpoken = clean(spokenText);
+
+            let accuracy = 0;
+            if (cleanTarget.length > 0) {
+                const matchedWords = cleanSpoken.split(' ').filter(w => cleanTarget.includes(w)).length;
+                const totalWords = cleanTarget.split(' ').length;
+                accuracy = Math.min(100, Math.round((matchedWords / totalWords) * 100));
+            }
+
+            document.getElementById('speech-accuracy').classList.remove('hidden');
+            document.getElementById('speech-accuracy').textContent = `الدقة: ${accuracy}%`;
+
+            // Formulate Sheikh Advice
+            let feedback = "";
+            if (accuracy >= 70) {
+                feedback = `فتح الله عليك يا بني! قراءتك ممتازة وحفظك متقن لآية: ﴿${targetText}﴾. واصل هذا التميز!`;
+                userPoints += 20;
+                updateUserPoints();
+                if (currentAyahIndex < currentReciteSurah.ayahs.length - 1) {
+                    currentAyahIndex++;
+                    document.getElementById('target-ayah-text').textContent = currentReciteSurah.ayahs[currentAyahIndex].text;
+                }
+            } else if (accuracy >= 30) {
+                feedback = `أحسنت محاولة التلاوة يا بني، لكن تحتاج لتركيز ومراجع بعض الكلمات في الآية. أعد استماع السورة من المصحف ثم جرب التسميع ثانية.`;
+            } else {
+                feedback = `تذكر قول النبي ﷺ: "الذي يقرأ القرآن وهو يشتد عليه له أجران". لا تيأس واستمر في المحاولة والمراجعة.`;
+            }
+
+            document.getElementById('sheikh-comment').textContent = feedback;
+            speakSheikhFeedback();
+        }
+
+        function updateUserPoints() {
+            const pointsElem = document.getElementById('stat-points');
+            if (pointsElem) pointsElem.textContent = userPoints;
+        }
+
+        function toggleCheckItem(btn, pts) {
+            btn.classList.remove('bg-emerald-100', 'text-emerald-800', 'bg-amber-100', 'text-amber-800');
+            btn.classList.add('bg-emerald-700', 'text-white');
+            btn.innerHTML = `<i class="fa-solid fa-check-circle ml-1"></i> مكتملة (+${pts})`;
+            userPoints += pts;
+            updateUserPoints();
+        }
+
+        function submitJournalEntry() {
+            const val = document.getElementById('reflection-input').value.trim();
+            if(!val) {
+                alert("يرجى كتابة نص الجلسة أولاً.");
+                return;
+            }
+            alert("تم حفظ الجلسة بنجاح، وتلقى المعلم الذكي تدوينتك لتقديم النصيحة والسلوك.");
+            document.getElementById('reflection-input').value = '';
+        }
+
+        function filterSurahs() {
+            const query = document.getElementById('surah-search').value.trim().toLowerCase();
+            const filtered = quranData.filter(s => 
+                s.name.includes(query) || s.number.toString() === query
+            );
+            if (filtered.length > 0) {
+                populateSurahSelect(filtered);
+                loadSurah(filtered[0].number);
+            }
+        }
+
+        function loadSurah(surahNum) {
+            const surah = quranData.find(s => s.number == surahNum);
+            if (!surah) return;
+
+            currentSurahIndex = quranData.indexOf(surah);
+            document.getElementById('surah-title').textContent = `سورة ${surah.name}`;
+            document.getElementById('surah-meta').textContent = `${surah.type} • ${surah.count} آيات`;
+            
+            const wirdTag = document.getElementById('daily-word-tag');
+            if (surah.number === selectedWirdSurah) {
+                wirdTag.classList.remove('hidden');
+            } else {
+                wirdTag.classList.add('hidden');
+            }
+
+            quranAudioPlayer.src = surah.audio;
+            if (isPlaying) {
+                quranAudioPlayer.play();
+            }
+
+            const display = document.getElementById('quran-display');
+            display.innerHTML = '';
+
+            if (surah.number !== 1 && surah.number !== 9) {
+                const basmala = document.createElement('div');
+                basmala.className = "text-center font-amiri text-lg text-emerald-800 mb-4 font-bold";
+                basmala.textContent = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ";
+                display.appendChild(basmala);
+            }
+
+            surah.ayahs.forEach((ayah) => {
+                const ayahBox = document.createElement('div');
+                ayahBox.className = "p-3 rounded-xl transition-all cursor-pointer border border-transparent hover:border-emerald-300 hover:bg-emerald-50/60 flex items-start justify-between space-x-3 space-x-reverse";
+                ayahBox.onclick = () => showTafseer(surah.name, ayah);
+
+                ayahBox.innerHTML = `
+                    <div class="flex-grow">
+                        <p class="font-amiri text-xl md:text-2xl leading-loose text-gray-800">
+                            ${ayah.text} 
+                            <span class="inline-flex items-center justify-center w-7 h-7 text-xs font-bold text-emerald-900 bg-sand-200 rounded-full font-sans mr-2 border border-gold-400">﴿${ayah.number}﴾</span>
+                        </p>
+                    </div>
+                    <button class="text-xs px-2 py-1 bg-sand-200 hover:bg-gold-500 hover:text-emerald-950 text-emerald-900 rounded transition font-bold whitespace-nowrap self-center">
+                        التفسير
+                    </button>
+                `;
+                display.appendChild(ayahBox);
+            });
+
+            if (surah.ayahs.length > 0) {
+                showTafseer(surah.name, surah.ayahs[0]);
+            }
+        }
+
+        function showTafseer(surahName, ayah) {
+            document.getElementById('tafseer-verse-num').textContent = `سورة ${surahName} - الآية (${ayah.number})`;
+            document.getElementById('tafseer-verse-text').textContent = ayah.text;
+            document.getElementById('tafseer-text').textContent = ayah.tafseer;
+            document.getElementById('tafseer-benefit').textContent = ayah.benefit;
+        }
+
+        function toggleQuranAudio() {
+            const btnIcon = document.getElementById('quran-play-icon');
+            const statusText = document.getElementById('audio-status');
+
+            if (isPlaying) {
+                quranAudioPlayer.pause();
+                isPlaying = false;
+                btnIcon.className = "fa-solid fa-play";
+                statusText.textContent = "تلاوة السورة بصوت الشيخ المعلم";
+            } else {
+                quranAudioPlayer.play().then(() => {
+                    isPlaying = true;
+                    btnIcon.className = "fa-solid fa-pause";
+                    statusText.textContent = "جاري تشغيل التلاوة...";
+                }).catch(err => {
+                    statusText.textContent = "عذراً، تعذر تشغيل الصوت تلقائياً";
+                });
+            }
+        }
+
+        function markCurrentSurahAsWird() {
+            const surah = quranData[currentSurahIndex];
+            selectedWirdSurah = surah.number;
+            document.getElementById('daily-word-tag').classList.remove('hidden');
+            alert(`تم تحديد سورة ${surah.name} كـ وردك اليومي بنجاح!`);
+        }
+
+        function speakSheikhFeedback() {
+            const comment = document.getElementById('sheikh-comment').textContent;
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(comment);
+                utterance.lang = 'ar-SA';
+                utterance.pitch = 0.9;
+                utterance.rate = 0.95;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Vanilla JS Tab Switching mechanism
+        function switchTab(tabId) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(el => el.classList.add('hidden'));
+
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-gold-500', 'text-emerald-950', 'shadow');
+                btn.classList.add('text-emerald-200', 'hover:bg-emerald-800', 'hover:text-white');
+            });
+
+            const activeContent = document.getElementById('sec-' + tabId);
+            if (activeContent) {
+                activeContent.classList.remove('hidden');
+            }
+
+            const activeBtn = document.getElementById('tab-' + tabId);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-emerald-200', 'hover:bg-emerald-800', 'hover:text-white');
+                activeBtn.classList.add('bg-gold-500', 'text-emerald-950', 'shadow');
+            }
+        }
+    </script>
+</body>
+</html>
